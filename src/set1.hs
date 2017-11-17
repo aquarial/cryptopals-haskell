@@ -26,13 +26,18 @@ xorB a b = B16.encode $ B.pack $ B.zipWith xor (fst $ B16.decode a) (fst $ B16.d
 
 
 -- Challenge 3
-c3 =  L.sortOn xorScore $ allXors "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+c3 = bestXor $ fst $ B16.decode "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+
+
+bestXor :: ByteString -> ByteString
+bestXor = C8.filter C.isPrint . last . L.sortOn xorScore . allXors
 
 xorScore :: ByteString -> Int
 xorScore = B.length . C8.filter C.isAlpha
 
+
 allXors :: ByteString -> [ByteString]
-allXors bs = [xorB bs b  | b <- xorCodes (B.length bs)]
+allXors bs = [B.pack $ B.zipWith xor bs b  | b <- xorCodes (B.length bs)]
 
 xorCodes :: Int -> [ByteString]
-xorCodes len = map (C8.replicate len . C.chr) [0..255]
+xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
