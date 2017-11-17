@@ -21,6 +21,7 @@ executable cryptopals
                      , bytestring
                      , split
                      , digits
+                     , wreq
                      , base16-bytestring
                      , base64-bytestring >= 1.0
 
