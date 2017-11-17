@@ -18,10 +18,13 @@ hexToBase64 = B64.encode . fst . B16.decode
 
 -- Challenge 2
 c2 :: ByteString
-c2 = xorB "1c0111001f010100061a024b53535009181c" "686974207468652062756c6c277320657965"
+c2 = B16.encode $ xorB (b16to64 "1c0111001f010100061a024b53535009181c")
+                       (b16to64 "686974207468652062756c6c277320657965")
+  where
+    b16to64 = fst . B16.decode
 
 xorB :: ByteString -> ByteString -> ByteString
-xorB a b = B16.encode $ B.pack $ B.zipWith xor (fst $ B16.decode a) (fst $ B16.decode b)
+xorB a b = B.pack $ B.zipWith xor a b
 
 
 
@@ -37,7 +40,7 @@ xorScore = B.length . C8.filter C.isAlpha
 
 
 allXors :: ByteString -> [ByteString]
-allXors bs = [B.pack $ B.zipWith xor bs b  | b <- xorCodes (B.length bs)]
+allXors bs = [xorB b bs | b <- xorCodes (B.length bs)]
 
 xorCodes :: Int -> [ByteString]
 xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
