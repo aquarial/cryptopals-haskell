@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 import qualified Data.Bits as Bits
 
+import           Data.Function (on)
+
 import           Data.Char (ord)
 import qualified Data.Char              as C
 
@@ -43,14 +45,13 @@ xorB a b = B.pack $ B.zipWith Bits.xor a b
 
 -- Challenge 3
 c3 :: ByteString
-c3 = bestXor $ allXors $ fst $ B16.decode "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+c3 = decode "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+  where
+    decode :: ByteString -> ByteString
+    decode = L.maximumBy (compare `on` englishScore) . allOneCharXors . fst . B16.decode
 
-
-bestXor :: [ByteString] -> ByteString
-bestXor = last . L.sortOn xorScore
-
-xorScore :: ByteString -> Double
-xorScore =  sum . map (\c -> Map.lookupDefault 0 c freq) . map C.toLower . C8.unpack
+englishScore :: ByteString -> Double
+englishScore =  sum . map (\c -> Map.lookupDefault 0 c freq) . map C.toLower . C8.unpack
   where
     freq = Map.fromList [('a', 8.167), ('b', 1.492), ('c', 2.782), ('d', 4.253), ('e', 12.70), ('f', 2.228),
                          ('g', 2.015), ('h', 6.094), ('i', 6.966), ('j', 0.153), ('k', 0.772), ('l', 4.025),
@@ -58,8 +59,8 @@ xorScore =  sum . map (\c -> Map.lookupDefault 0 c freq) . map C.toLower . C8.un
                          ('s', 6.327), ('t', 9.056), ('u', 2.758), ('v', 0.978), ('w', 2.360), ('x', 0.150),
                          ('y', 1.974), ('z', 0.074), (' ', 18.10)]
 
-allXors :: ByteString -> [ByteString]
-allXors bs = [xorB b bs | b <- xorCodes (B.length bs)]
+allOneCharXors :: ByteString -> [ByteString]
+allOneCharXors bs = [xorB b bs | b <- xorCodes (B.length bs)]
   where
     xorCodes :: Int -> [ByteString]
     xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
@@ -73,7 +74,9 @@ c4 = do
   a <- Wreq.get "https://cryptopals.com/static/challenge-data/4.txt"
   let body = a ^. Wreq.responseBody
       strs = map (fst . B16.decode . BL.toStrict) $ BL.split nline body
-  return $ bestXor $ concatMap allXors strs
+      possibleOutcomes = concatMap allOneCharXors strs
+      mostEnglish = L.maximumBy (compare `on` englishScore) possibleOutcomes
+  return mostEnglish
   where
     nline = fromIntegral (ord '\n')
 
