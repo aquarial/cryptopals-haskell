@@ -59,8 +59,9 @@ xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z
 c4 = do
   a <- Wreq.get "https://cryptopals.com/static/challenge-data/4.txt"
   let body = a ^. Wreq.responseBody
-      strs = map (fst . B16.decode . BL.toStrict) $ BL.split nline body
-      best = L.sortOn xorScore $ map B16.encode $ concatMap allXors strs
+      strs = map BL.toStrict $ BL.split nline body
+      str2 = map (bestXor . allXors . fst . B16.decode) strs
+      best = L.sortOn xorScore str2
   return best
   where
     nline = fromIntegral (ord '\n')
