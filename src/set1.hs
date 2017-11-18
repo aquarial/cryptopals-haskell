@@ -75,3 +75,12 @@ c4 = do
   return $ bestXor $ concatMap allXors strs
   where
     nline = fromIntegral (ord '\n')
+
+
+-- Challenge 5
+c5 = B16.encode $ repeatingXor "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal" "ICE"
+
+repeatingXor :: ByteString -> BL.ByteString -> ByteString
+repeatingXor a b = xorB a $ BL.toStrict $ BL.take len (BL.cycle b)
+  where
+    len = fromIntegral $ B.length a
