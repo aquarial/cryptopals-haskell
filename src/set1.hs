@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Bits (xor)
+import qualified Data.Bits as Bits
+
 import           Data.Char (ord)
 import qualified Data.Char              as C
 
@@ -36,7 +37,7 @@ c2 = B16.encode $ xorB (b16decode "1c0111001f010100061a024b53535009181c")
     b16decode = fst . B16.decode
 
 xorB :: ByteString -> ByteString -> ByteString
-xorB a b = B.pack $ B.zipWith xor a b
+xorB a b = B.pack $ B.zipWith Bits.xor a b
 
 
 
