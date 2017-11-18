@@ -1,12 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Bits (xor)
+import           Data.Char (isPrint, isAlpha)
+
+import qualified Data.List              as L
+
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString        as B
 import qualified Data.ByteString.Base64 as B64
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8  as C8
-import qualified Data.Char              as C
-import qualified Data.List              as L
 
 -- Challenge 1
 c1 :: ByteString
@@ -29,14 +31,15 @@ xorB a b = B.pack $ B.zipWith xor a b
 
 
 -- Challenge 3
+c3 :: ByteString
 c3 = bestXor $ fst $ B16.decode "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 
 
 bestXor :: ByteString -> ByteString
-bestXor = C8.filter C.isPrint . last . L.sortOn xorScore . allXors
+bestXor = C8.filter isPrint . last . L.sortOn xorScore . allXors
 
 xorScore :: ByteString -> Int
-xorScore = B.length . C8.filter C.isAlpha
+xorScore = B.length . C8.filter isAlpha
 
 
 allXors :: ByteString -> [ByteString]
