@@ -32,11 +32,11 @@ xorB a b = B.pack $ B.zipWith xor a b
 
 -- Challenge 3
 c3 :: ByteString
-c3 = bestXor $ fst $ B16.decode "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+c3 = bestXor $ allXors $ fst $ B16.decode "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 
 
-bestXor :: ByteString -> ByteString
-bestXor = C8.filter isPrint . last . L.sortOn xorScore . allXors
+bestXor :: [ByteString] -> ByteString
+bestXor = C8.filter isPrint . last . L.sortOn xorScore
 
 xorScore :: ByteString -> Int
 xorScore = B.length . C8.filter isAlpha
