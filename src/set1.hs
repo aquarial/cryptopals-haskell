@@ -11,9 +11,10 @@ import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8  as C8
 import qualified Data.ByteString.Lazy   as BL
 
-
 import           Control.Lens ((^.))
 import qualified Network.Wreq           as Wreq
+
+
 
 -- Challenge 1
 c1 :: ByteString
@@ -21,6 +22,7 @@ c1 = hexToBase64 "49276d206b696c6c696e6720796f757220627261696e206c696b6520612070
 
 hexToBase64 :: ByteString -> ByteString
 hexToBase64 = B64.encode . fst . B16.decode
+
 
 
 -- Challenge 2
@@ -54,8 +56,8 @@ xorCodes :: Int -> [ByteString]
 xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
 
 
--- Challenge 4
 
+-- Challenge 4
 c4 = do
   a <- Wreq.get "https://cryptopals.com/static/challenge-data/4.txt"
   let body = a ^. Wreq.responseBody
