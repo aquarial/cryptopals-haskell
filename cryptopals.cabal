@@ -25,6 +25,6 @@ executable cryptopals
                      , digits
                      , lens
                      , wreq
-                     , unordered-containers >= 0.2
+                     , unordered-containers >= 0.2.8
 
 
