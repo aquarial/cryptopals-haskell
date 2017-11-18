@@ -36,7 +36,7 @@ c3 = bestXor $ allXors $ fst $ B16.decode "1b37373331363f78151b7f2b783431333d783
 
 
 bestXor :: [ByteString] -> ByteString
-bestXor = C8.filter isPrint . last . L.sortOn xorScore
+bestXor = last . L.sortOn xorScore
 
 xorScore :: ByteString -> Int
 xorScore = B.length . C8.filter isAlpha
