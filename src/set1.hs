@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Bits (xor)
-import           Data.Char (isPrint, isAlpha)
+import           Data.Char (ord, isPrint, isAlpha)
 
 import qualified Data.List              as L
 
@@ -9,6 +9,11 @@ import qualified Data.ByteString        as B
 import qualified Data.ByteString.Base64 as B64
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8  as C8
+import qualified Data.ByteString.Lazy   as BL
+
+
+import           Control.Lens ((^.))
+import qualified Network.Wreq           as Wreq
 
 -- Challenge 1
 c1 :: ByteString
@@ -47,3 +52,15 @@ allXors bs = [xorB b bs | b <- xorCodes (B.length bs)]
 
 xorCodes :: Int -> [ByteString]
 xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
+
+
+-- Challenge 4
+
+c4 = do
+  a <- Wreq.get "https://cryptopals.com/static/challenge-data/4.txt"
+  let body = a ^. Wreq.responseBody
+      strs = map (fst . B16.decode . BL.toStrict) $ BL.split nline body
+      best = L.sortOn xorScore $ map B16.encode $ concatMap allXors strs
+  return best
+  where
+    nline = fromIntegral (ord '\n')
