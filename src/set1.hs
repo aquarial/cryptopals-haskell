@@ -85,3 +85,11 @@ repeatingXor :: ByteString -> BL.ByteString -> ByteString
 repeatingXor a b = xorB a $ BL.toStrict $ BL.take len (BL.cycle b)
   where
     len = fromIntegral $ B.length a
+
+
+
+-- Challenge 6
+c6 = undefined
+
+hammingDist :: ByteString -> ByteString -> Int
+hammingDist a b = B.foldl' (\a b -> a + Bits.popCount b) 0 $ xorB a b
