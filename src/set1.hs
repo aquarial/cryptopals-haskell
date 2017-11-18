@@ -20,10 +20,10 @@ hexToBase64 = B64.encode . fst . B16.decode
 
 -- Challenge 2
 c2 :: ByteString
-c2 = B16.encode $ xorB (b16to64 "1c0111001f010100061a024b53535009181c")
-                       (b16to64 "686974207468652062756c6c277320657965")
+c2 = B16.encode $ xorB (b16decode "1c0111001f010100061a024b53535009181c")
+                       (b16decode "686974207468652062756c6c277320657965")
   where
-    b16to64 = fst . B16.decode
+    b16decode = fst . B16.decode
 
 xorB :: ByteString -> ByteString -> ByteString
 xorB a b = B.pack $ B.zipWith xor a b
