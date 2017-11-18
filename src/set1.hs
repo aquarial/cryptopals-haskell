@@ -97,7 +97,7 @@ c6 = undefined
 rateKeySize :: ByteString -> Int -> Double
 rateKeySize str keysize = ((/) `on` fromIntegral) editDistance keysize
   where
-    editDistance = sum $ take (4 * keysize) $ B.zipWith ((+) `on` Bits.popCount) str (B.drop keysize str)
+    editDistance = hammingDist (B.take keysize str) (B.drop keysize str)
 
 hammingDist :: ByteString -> ByteString -> Int
 hammingDist a b = B.foldl' (\a b -> a + Bits.popCount b) 0 $ xorB a b
