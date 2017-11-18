@@ -59,9 +59,10 @@ xorScore =  sum . map (\c -> Map.lookupDefault 0 c freq) . map C.toLower . C8.un
 
 allXors :: ByteString -> [ByteString]
 allXors bs = [xorB b bs | b <- xorCodes (B.length bs)]
+  where
+    xorCodes :: Int -> [ByteString]
+    xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
 
-xorCodes :: Int -> [ByteString]
-xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
 
 
 
