@@ -25,5 +25,6 @@ executable cryptopals
                      , wreq
                      , base16-bytestring
                      , base64-bytestring >= 1.0
+                     , unordered-containers >= 0.2
 
 
