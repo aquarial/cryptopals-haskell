@@ -50,7 +50,7 @@ c3 :: ByteString
 c3 = decode "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
   where
     decode :: ByteString -> ByteString
-    decode = L.maximumBy (compare `on` englishScore) . allOneCharXors . fst . B16.decode
+    decode = L.maximumBy (compare `on` englishScore) . tryXorWithEachChar . fst . B16.decode
 
 englishScore :: ByteString -> Double
 englishScore =  sum . map (\c -> Map.lookupDefault 0 c freq) . map C.toLower . C8.unpack
@@ -61,8 +61,8 @@ englishScore =  sum . map (\c -> Map.lookupDefault 0 c freq) . map C.toLower . C
                          ('s', 6.327), ('t', 9.056), ('u', 2.758), ('v', 0.978), ('w', 2.360), ('x', 0.150),
                          ('y', 1.974), ('z', 0.074), (' ', 18.10)]
 
-allOneCharXors :: ByteString -> [ByteString]
-allOneCharXors bs = [xorB b bs | b <- xorCodes (B.length bs)]
+tryXorWithEachChar :: ByteString -> [ByteString]
+tryXorWithEachChar bs = [xorB b bs | b <- xorCodes (B.length bs)]
   where
     xorCodes :: Int -> [ByteString]
     xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
@@ -76,7 +76,7 @@ c4 = do
   a <- Wreq.get "https://cryptopals.com/static/challenge-data/4.txt"
   let body = a ^. Wreq.responseBody
       strs = map (fst . B16.decode . BL.toStrict) $ BL.split nline body
-      possibleOutcomes = concatMap allOneCharXors strs
+      possibleOutcomes = concatMap tryXorWithEachChar strs
       mostEnglish = L.maximumBy (compare `on` englishScore) possibleOutcomes
   return mostEnglish
   where
