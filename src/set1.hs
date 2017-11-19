@@ -1,26 +1,26 @@
 {-# LANGUAGE OverloadedStrings #-}
-import qualified Data.Bits as Bits
+import qualified Data.Bits                  as Bits
 
-import           Data.Function (on)
+import           Data.Function              (on)
 
-import           Data.Char (ord)
-import qualified Data.Char              as C
+import           Data.Char                  (ord)
+import qualified Data.Char                  as C
 
-import           Data.Either (rights)
-import qualified Data.List              as L
+import           Data.Either                (rights)
+import qualified Data.List                  as L
 
-import           Data.ByteString (ByteString)
-import qualified Data.ByteString        as B
-import qualified Data.ByteString.Base64 as B64
-import qualified Data.ByteString.Base16 as B16
-import qualified Data.ByteString.Char8  as C8
-import qualified Data.ByteString.Lazy   as BL
+import           Data.ByteString            (ByteString)
+import qualified Data.ByteString            as B
+import qualified Data.ByteString.Base16     as B16
+import qualified Data.ByteString.Base64     as B64
+import qualified Data.ByteString.Char8      as C8
+import qualified Data.ByteString.Lazy       as BL
 import qualified Data.ByteString.Lazy.Char8 as C8L
 
-import           Control.Lens ((^.))
-import qualified Network.Wreq           as Wreq
+import           Control.Lens               ((^.))
+import qualified Network.Wreq               as Wreq
 
-import qualified Data.HashMap.Strict    as Map
+import qualified Data.HashMap.Strict        as Map
 
 
 
