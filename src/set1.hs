@@ -6,6 +6,7 @@ import           Data.Function (on)
 import           Data.Char (ord)
 import qualified Data.Char              as C
 
+import           Data.Either (rights)
 import qualified Data.List              as L
 
 import           Data.ByteString (ByteString)
@@ -92,7 +93,32 @@ repeatingXor a b = xorB a $ BL.toStrict $ BL.take len (BL.cycle b)
 
 
 -- Challenge 6
-c6 = undefined
+c6 = do
+  r <- Wreq.get "https://cryptopals.com/static/challenge-data/6.txt"
+  let b64msg = B.concat $ C8.lines $ BL.toStrict $ r ^. Wreq.responseBody
+      msg = head $ rights $ B64.decode b64msg : []
+  return $ take 40 $ map (posibs msg) [1..50]
+  where
+    posibs :: ByteString -> Int -> [Char]
+    posibs s k = map bestChar $ B.transpose $ chunks k s
+    bestChar :: ByteString -> Char
+    bestChar bs = fst $ L.maximumBy (compare `on` (englishScore . snd)) $ oneCharWithXors bs
+
+chunks :: Int -> ByteString -> [ByteString]
+chunks size bstr | B.length bstr == 0 = []
+                 | otherwise          = B.take size bstr : chunks size (B.drop size bstr)
+
+oneCharWithXors :: ByteString -> [(Char, ByteString)]
+oneCharWithXors bs = zip chars [xorB b bs | b <- xorCodes (B.length bs)]
+  where
+    xorCodes :: Int -> [ByteString]
+    xorCodes len = map (C8.replicate len) chars
+    chars :: [Char]
+    chars = concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
+
+
+keys :: ByteString -> [Int]
+keys str = reverse $ L.sortOn (rateKeySize str) [1..50]
 
 rateKeySize :: ByteString -> Int -> Double
 rateKeySize str keysize = ((/) `on` fromIntegral) editDistance keysize
