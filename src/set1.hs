@@ -15,6 +15,7 @@ import qualified Data.ByteString.Base64 as B64
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8  as C8
 import qualified Data.ByteString.Lazy   as BL
+import qualified Data.ByteString.Lazy.Char8 as C8L
 
 import           Control.Lens ((^.))
 import qualified Network.Wreq           as Wreq
@@ -95,24 +96,25 @@ repeatingXor a b = xorB a $ BL.toStrict $ BL.take len $ BL.cycle $ BL.fromStrict
 -- Challenge 6
 c6 = do
   r <- Wreq.get "https://cryptopals.com/static/challenge-data/6.txt"
-  let b64msg = B.concat $ C8.lines $ BL.toStrict $ r ^. Wreq.responseBody
-      msg = head $ rights $ B64.decode b64msg : []
-  return $ take 40 $ map (posibs msg) [1..50]
+  let msg = decode64 $ BL.toStrict $ C8L.filter (/= '\n') $ r ^. Wreq.responseBody
+      key = L.maximumBy (compare `on` (englishScore . repeatingXor msg)) $ map (keyOfLen msg) [2..40]
+  C8.putStrLn $ repeatingXor msg key
+  return key
   where
-    posibs :: ByteString -> Int -> [Char]
-    posibs s k = map bestChar $ B.transpose $ chunks k s
-    bestChar :: ByteString -> Char
+    keyOfLen :: ByteString -> Int -> ByteString
+    keyOfLen s k = B.concat $ map bestChar $ B.transpose $ chunks k s
+    bestChar :: ByteString -> ByteString
     bestChar bs = fst $ L.maximumBy (compare `on` (englishScore . snd)) $ oneCharWithXors bs
 
 chunks :: Int -> ByteString -> [ByteString]
 chunks size bstr | B.length bstr == 0 = []
                  | otherwise          = B.take size bstr : chunks size (B.drop size bstr)
 
-oneCharWithXors :: ByteString -> [(Char, ByteString)]
-oneCharWithXors bs = zip chars [xorB b bs | b <- xorCodes (B.length bs)]
+oneCharWithXors :: ByteString -> [(ByteString, ByteString)]
+oneCharWithXors b = map (fmap (xorB b)) codes
   where
-    xorCodes :: Int -> [ByteString]
-    xorCodes len = map (C8.replicate len) chars
+    codes :: [(ByteString, ByteString)]
+    codes = map (\c -> (C8.singleton c, C8.replicate (B.length b) c)) chars
     chars :: [Char]
     chars = concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
 
