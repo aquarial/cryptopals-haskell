@@ -132,3 +132,14 @@ hammingDist a b = B.foldl' (\a b -> a + Bits.popCount b) 0 $ xorB a b
 
 decode64 :: ByteString -> ByteString
 decode64 = head . rights . flip (:) [] . B64.decode
+
+
+
+-- Challenge 7
+c7 = do
+  r <- Wreq.get "https://cryptopals.com/static/challenge-data/7.txt"
+  let msg = decode64 $ BL.toStrict $ C8L.filter (/= '\n') $ r ^. Wreq.responseBody
+  C8.putStrLn $ repeatingXor msg "YELLOW SUBMARINE"
+  return ()
+
+
