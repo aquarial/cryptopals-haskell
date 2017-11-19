@@ -128,3 +128,5 @@ rateKeySize str keysize = ((/) `on` fromIntegral) editDistance keysize
 hammingDist :: ByteString -> ByteString -> Int
 hammingDist a b = B.foldl' (\a b -> a + Bits.popCount b) 0 $ xorB a b
 
+decode64 :: ByteString -> ByteString
+decode64 = head . rights . flip (:) [] . B64.decode
