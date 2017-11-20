@@ -22,7 +22,10 @@ import qualified Network.Wreq               as Wreq
 
 import qualified Data.HashMap.Strict        as Map
 
-
+import           Crypto.Error (throwCryptoError)
+import           Crypto.Cipher.AES (AES128)
+import           Crypto.Cipher.Types (BlockCipher(ecbDecrypt),
+                                      Cipher(cipherInit))
 
 -- Challenge 1
 c1 :: ByteString
@@ -136,10 +139,14 @@ decode64 = head . rights . flip (:) [] . B64.decode
 
 
 -- Challenge 7
+c7 :: IO ()
 c7 = do
   r <- Wreq.get "https://cryptopals.com/static/challenge-data/7.txt"
   let msg = decode64 $ BL.toStrict $ C8L.filter (/= '\n') $ r ^. Wreq.responseBody
-  C8.putStrLn $ repeatingXor msg "YELLOW SUBMARINE"
-  return ()
+  C8.putStrLn $ decryptECB "YELLOW SUBMARINE" msg
 
-
+decryptECB :: ByteString -> ByteString -> ByteString
+decryptECB key bytes =  ecbDecrypt ctx bytes
+  where
+    ctx :: AES128
+    ctx = throwCryptoError $ cipherInit key
