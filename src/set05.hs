@@ -22,10 +22,10 @@ import qualified Network.Wreq               as Wreq
 
 import qualified Data.HashMap.Strict        as Map
 
-import           Crypto.Error (throwCryptoError)
-import           Crypto.Cipher.AES (AES128)
-import           Crypto.Cipher.Types (BlockCipher(ecbDecrypt),
-                                      Cipher(cipherInit))
+import           Crypto.Cipher.AES          (AES128)
+import           Crypto.Cipher.Types        (BlockCipher (ecbDecrypt),
+                                             Cipher (cipherInit))
+import           Crypto.Error               (throwCryptoError)
 
 -- Challenge 1
 c1 :: ByteString

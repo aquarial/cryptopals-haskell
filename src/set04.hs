@@ -1,11 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module C4 where
 
+import           Control.Lens               ((^.))
 import           Data.Bits                  (xor)
-import           Data.Function              (on)
-import           Data.Char                  (ord)
-import           Data.Char                  (toLower)
-import           Data.List                  (maximumBy)
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString            as B
 import qualified Data.ByteString.Base16     as B16
@@ -13,9 +10,12 @@ import qualified Data.ByteString.Base64     as B64
 import qualified Data.ByteString.Char8      as C8
 import qualified Data.ByteString.Lazy       as BL
 import qualified Data.ByteString.Lazy.Char8 as C8L
-import           Control.Lens               ((^.))
-import qualified Network.Wreq               as Wreq
+import           Data.Char                  (ord)
+import           Data.Char                  (toLower)
+import           Data.Function              (on)
 import qualified Data.HashMap.Strict        as Map
+import           Data.List                  (maximumBy)
+import qualified Network.Wreq               as Wreq
 
 c4 :: IO ByteString
 c4 = do
