@@ -21,6 +21,8 @@ executable cryptopals
                      , bytestring
                      , base16-bytestring
                      , base64-bytestring >= 1.0
+                     , cryptonite
+                     , memory
                      , split
                      , digits
                      , lens
