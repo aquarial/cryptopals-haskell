@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Set05 where
 
+import           Set02                      (xorB)
 import           Data.Bits                  (xor)
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString            as B
@@ -14,6 +15,3 @@ repeatingXor :: ByteString -> BL.ByteString -> ByteString
 repeatingXor a b = xorB a $ BL.toStrict $ BL.take len $ BL.cycle b
   where
     len = fromIntegral $ B.length a
-
-xorB :: ByteString -> ByteString -> ByteString
-xorB a b = B.pack $ B.zipWith xor a b

@@ -1,16 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Set07 where
 
+import           Set06                      (decode64)
+
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString.Lazy       as BL
+import qualified Data.ByteString.Char8      as C8
 import qualified Data.ByteString.Lazy.Char8 as C8L
 
 import           Control.Lens               ((^.))
 import qualified Network.Wreq               as Wreq
 
 import           Crypto.Cipher.AES          (AES128)
-import           Crypto.Cipher.Types        (BlockCipher (ecbDecrypt),
-                                             Cipher (cipherInit))
+import           Crypto.Cipher.Types        (BlockCipher (ecbDecrypt), Cipher (cipherInit))
 import           Crypto.Error               (throwCryptoError)
 
 c7 :: IO ()
