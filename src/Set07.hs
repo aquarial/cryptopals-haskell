@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+module Set07 where
 
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString.Lazy       as BL

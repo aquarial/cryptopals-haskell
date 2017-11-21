@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module C2 where
+module Set02 where
 
 import qualified Data.Bits              as Bits
 

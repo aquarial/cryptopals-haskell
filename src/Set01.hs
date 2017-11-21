@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module C1 where
+module Set01 where
 
 import           Data.ByteString        (ByteString)
 import qualified Data.ByteString.Base16 as B16

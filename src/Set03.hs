@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module C3 where
+module Set03 where
 
 import           Data.Bits              (xor)
 import           Data.Char              (ord, toLower)

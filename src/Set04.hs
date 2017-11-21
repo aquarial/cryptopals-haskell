@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module C4 where
+module Set04 where
 
 import           Control.Lens               ((^.))
 import           Data.Bits                  (xor)

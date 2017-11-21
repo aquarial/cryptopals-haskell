@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module C5 where
+module Set05 where
 
 import           Data.Bits                  (xor)
 import           Data.ByteString            (ByteString)
