@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Challenge03 where
 
-import           Challenge02                  (xorB)
+import           Challenge02            (xorB)
 
 import           Data.Char              (ord, toLower)
 import           Data.Function          (on)

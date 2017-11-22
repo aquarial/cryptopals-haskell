@@ -1,9 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Challenge06 where
 
-import           Challenge02                      (xorB)
-import           Challenge03                      (englishScore)
-import           Challenge05                      (repeatingXor)
+import           Challenge02                (xorB)
+import           Challenge03                (englishScore)
+import           Challenge05                (repeatingXor)
 
 import qualified Data.Bits                  as Bits
 
