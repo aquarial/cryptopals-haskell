@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Set04 where
+module Challenge04 where
 
-import           Set03                      (englishScore, tryXorWithEachChar)
+import           Challenge03                      (englishScore, tryXorWithEachChar)
+
 import           Control.Lens               ((^.))
 import           Data.Bits                  (xor)
 import           Data.ByteString            (ByteString)

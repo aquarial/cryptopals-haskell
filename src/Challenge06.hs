@@ -1,9 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Set06 where
+module Challenge06 where
 
-import           Set02                      (xorB)
-import           Set03                      (englishScore)
-import           Set05                      (repeatingXor)
+import           Challenge02                      (xorB)
+import           Challenge03                      (englishScore)
+import           Challenge05                      (repeatingXor)
 
 import qualified Data.Bits                  as Bits
 

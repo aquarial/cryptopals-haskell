@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Set07 where
+module Challenge07 where
 
-import           Set06                      (decode64)
+import           Challenge06                      (decode64)
 
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString.Lazy       as BL

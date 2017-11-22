@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Set02 where
+module Challenge02 where
 
 import qualified Data.Bits              as Bits
 

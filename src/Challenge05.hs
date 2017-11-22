@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Set05 where
+module Challenge05 where
 
-import           Set02                      (xorB)
+import           Challenge02                      (xorB)
+
 import           Data.Bits                  (xor)
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString            as B
