@@ -14,15 +14,15 @@ import Control.Lens ((^.))
 import qualified Network.Wreq as Wreq
 
 
-c8 :: IO ()
+--c8 :: IO ()
 c8 = do
   r <- Wreq.get "https://cryptopals.com/static/challenge-data/8.txt"
-  let res = map (fst . B16.decode . C8L.toStrict) $ C8L.split '\n' $ r ^. Wreq.responseBody
-      decrypted = sortOn englishScore $ concatMap tryAllKeys $ sortOn numRepeats res
+  let res = map (fst . B16.decode . C8L.toStrict) $ C8L.lines $ r ^. Wreq.responseBody
+      decrypted = maximumBy (compare `on` numRepeats) $ res
+  C8.putStrLn decrypted
   return ()
 
 numRepeats :: ByteString -> Int
-numRepeats = undefined
 numRepeats b = length chnks - length (nub chnks)
   where
     chnks = chunks 16 b
@@ -31,5 +31,3 @@ chunks :: Int -> ByteString -> [ByteString]
 chunks size bstr | B.length bstr == 0 = []
                  | otherwise          = B.take size bstr : chunks size (B.drop size bstr)
 
-tryAllKeys :: ByteString -> [ByteString]
-tryAllKeys = undefined
