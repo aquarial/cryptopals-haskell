@@ -27,6 +27,7 @@ c10 = do
       text =  parts
   return text
 
+-- https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CBC
 decryptCBC :: ByteString -> ByteString -> ByteString
 decryptCBC key body = C8.concat $ decryptCBCacc key (B.replicate 16 0) (chunks 16 body)
 
