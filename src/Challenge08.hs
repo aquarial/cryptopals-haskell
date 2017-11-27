@@ -2,6 +2,7 @@
 module Challenge08 where
 
 import           Challenge03                (englishScore, tryXorWithEachChar)
+import           Challenge06                (chunks)
 
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString            as B
@@ -27,8 +28,3 @@ numRepeats :: ByteString -> Int
 numRepeats b = length chnks - length (nub chnks)
   where
     chnks = chunks 16 b
-
-chunks :: Int -> ByteString -> [ByteString]
-chunks size bstr | B.length bstr == 0 = []
-                 | otherwise          = B.take size bstr : chunks size (B.drop size bstr)
-
