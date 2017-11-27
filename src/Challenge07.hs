@@ -23,7 +23,7 @@ c7 = do
   C8.putStrLn $ decryptECB "YELLOW SUBMARINE" msg
 
 decryptECB :: ByteString -> ByteString -> ByteString
-decryptECB key bytes =  ecbDecrypt ctx bytes
+decryptECB key bytes = ecbDecrypt ctx bytes
   where
     ctx :: AES128
     ctx = throwCryptoError $ cipherInit key

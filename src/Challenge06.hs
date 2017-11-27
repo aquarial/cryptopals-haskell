@@ -5,8 +5,6 @@ import           Challenge02                (xorB)
 import           Challenge03                (englishScore)
 import           Challenge05                (repeatingXor)
 
-import qualified Data.Bits                  as Bits
-
 import           Data.Function              (on)
 
 import           Data.Either                (rights)
