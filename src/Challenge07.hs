@@ -22,6 +22,8 @@ c7 = do
   let msg = decode64 $ BL.toStrict $ C8L.filter (/= '\n') $ r ^. Wreq.responseBody
   C8.putStrLn $ decryptECB "YELLOW SUBMARINE" msg
 
+encryptECB = decryptECB
+
 decryptECB :: ByteString -> ByteString -> ByteString
 decryptECB key bytes = ecbDecrypt ctx bytes
   where

@@ -1,6 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Challenge10 where
 
+
+import           Challenge07     (encryptECB)
+import           Challenge10     (decryptCBC)
+
 import qualified Data.ByteString as B
 import qualified System.Random   as R
 
