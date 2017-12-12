@@ -23,6 +23,7 @@ executable cryptopals
                      , base64-bytestring >= 1.0
                      , cryptonite
                      , memory
+                     , random
                      , split
                      , digits
                      , lens
