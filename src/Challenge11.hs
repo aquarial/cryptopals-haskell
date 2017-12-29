@@ -3,7 +3,7 @@ module Challenge11 where
 
 
 import           Challenge07     (encryptECB)
-import           Challenge10     (decryptCBC)
+import           Challenge10     (encryptCBC, decryptCBC)
 
 import           Data.Word
 import qualified Data.ByteString as B
@@ -17,3 +17,6 @@ key g = let (bytes,g2) = walk 16 [] g
     walk 0 acc g = (acc,g)
     walk n acc g = let (r,g2) = R.random g
                    in walk (n-1) (r:acc) g2
+
+
+randEncrypt = undefined

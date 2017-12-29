@@ -12,7 +12,7 @@ import           Control.Lens               ((^.))
 import qualified Network.Wreq               as Wreq
 
 import           Crypto.Cipher.AES          (AES128)
-import           Crypto.Cipher.Types        (BlockCipher (ecbDecrypt),
+import           Crypto.Cipher.Types        (BlockCipher (ecbEncrypt, ecbDecrypt),
                                              Cipher (cipherInit))
 import           Crypto.Error               (throwCryptoError)
 
@@ -22,10 +22,11 @@ c7 = do
   let msg = decode64 $ BL.toStrict $ C8L.filter (/= '\n') $ r ^. Wreq.responseBody
   C8.putStrLn $ decryptECB "YELLOW SUBMARINE" msg
 
-encryptECB = decryptECB
+aeskey :: ByteString -> AES128
+aeskey = throwCryptoError . cipherInit
+
+encryptECB :: ByteString -> ByteString -> ByteString
+encryptECB key bytes = ecbEncrypt (aeskey key) bytes
 
 decryptECB :: ByteString -> ByteString -> ByteString
-decryptECB key bytes = ecbDecrypt ctx bytes
-  where
-    ctx :: AES128
-    ctx = throwCryptoError $ cipherInit key
+decryptECB key bytes = ecbDecrypt (aeskey key) bytes
