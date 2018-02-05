@@ -14,16 +14,13 @@ import qualified Control.Monad.Random as R
 
 rPad :: R.MonadRandom m => m ByteString
 rPad = do len <- R.getRandomR (5, 10::Int)
-
           padding <- R.getRandomRs (minBound,maxBound::Word8)
           pure $ B.pack $ take len padding
 
 padAround :: R.MonadRandom m => ByteString -> m ByteString
-padAround text = do lpad <- R.getRandomR (5,10) >>= randomByteString
-                    rpad <- randomByteString $ 16 + (16 `mod` (B.length lpad + B.length text))
+padAround text = do lpad <- randomByteString =<< R.getRandomR (5,10)
+                    rpad <- randomByteString $ 16 - ((B.length lpad + B.length text) `mod` 16)
                     pure $ lpad <> text <> rpad
-  where
-roundto n x = x - (x `mod` n)
 
 
 randomByteString :: R.MonadRandom m => Int -> m ByteString
