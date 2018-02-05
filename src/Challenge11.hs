@@ -2,14 +2,14 @@
 module Challenge11 where
 
 
-import           Challenge07     (encryptECB, decryptECB)
-import           Challenge10     (encryptCBC, decryptCBC)
+import           Challenge07          (decryptECB, encryptECB)
+import           Challenge10          (decryptCBC, encryptCBC)
 
-import           Data.Monoid ((<>))
-import           Data.Word (Word8)
-import qualified Data.ByteString as B
-import  Data.ByteString (ByteString)
 import qualified Control.Monad.Random as R
+import           Data.ByteString      (ByteString)
+import qualified Data.ByteString      as B
+import           Data.Monoid          ((<>))
+import           Data.Word            (Word8)
 
 
 rPad :: R.MonadRandom m => m ByteString
