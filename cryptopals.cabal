@@ -22,8 +22,8 @@ executable cryptopals
                      , base16-bytestring
                      , base64-bytestring >= 1.0
                      , cryptonite
-                     , memory
                      , random
+                     , MonadRandom
                      , split
                      , digits
                      , lens
