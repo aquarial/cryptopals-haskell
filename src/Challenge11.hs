@@ -34,3 +34,13 @@ randEncrypt itext = do text <- padAround itext
                          False -> pure $ encryptECB key text
                          True  -> do iv <- randomByteString 16
                                      pure $ encryptCBC key iv text
+
+
+chunksof :: Int -> ByteString -> [ByteString]
+chunksof n xs = B.take n xs : chunksof n (B.drop n xs)
+
+detectEncrypt :: Monad m => (ByteString -> m ByteString) -> m Bool
+detectEncrypt func = do output <- func $ B.replicate 1000 0
+                        let inners = B.take 300 $ B.drop 100 output
+                            parts = chunksof 16 inners
+                        return $ all id $ take 3 $ zipWith (==) parts (drop 1 parts)
