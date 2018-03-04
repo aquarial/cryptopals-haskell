@@ -22,12 +22,18 @@ executable cryptopals
                      , base16-bytestring
                      , base64-bytestring >= 1.0
                      , cryptonite
+                     , conduit
+                     , conduit-extra
+                     , path
+                     , path-io
                      , random
                      , MonadRandom
+                     , text
                      , split
                      , digits
                      , lens
                      , wreq
+                     , req
                      , unordered-containers >= 0.2.8
 
 
