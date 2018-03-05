@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Challenge06 where
 
+import           NetworkIO (getResource)
 import           Challenge02                (xorB)
 import           Challenge03                (englishScore)
 import           Challenge05                (repeatingXor)
@@ -17,13 +18,9 @@ import qualified Data.ByteString.Char8      as C8
 import qualified Data.ByteString.Lazy       as BL
 import qualified Data.ByteString.Lazy.Char8 as C8L
 
-import           Control.Lens               ((^.))
-import qualified Network.Wreq               as Wreq
-
-
 c6 = do
-  r <- Wreq.get "https://cryptopals.com/static/challenge-data/6.txt"
-  let msg = decode64 $ BL.toStrict $ C8L.filter (/= '\n') $ r ^. Wreq.responseBody
+  txt <- getResource "https://cryptopals.com/static/challenge-data/6.txt"
+  let msg = decode64 $ BL.toStrict $ C8L.filter (/= '\n') txt
       key = L.maximumBy (compare `on` (englishScore . repeatingXor msg . BL.fromStrict)) $ map (keyOfLen msg) [2..40]
   C8.putStrLn $ repeatingXor msg $ BL.fromStrict key
   return key
@@ -42,7 +39,7 @@ bestChar :: ByteString -> ByteString
 bestChar bs = fst $ L.maximumBy (compare `on` (englishScore . snd)) $ oneCharWithXors bs
 
 oneCharWithXors :: ByteString -> [(ByteString, ByteString)]
-oneCharWithXors b = map (fmap (xorB b)) codes
+oneCharWithXors b = map (\(char,code) -> (char, xorB code b)) codes
   where
     codes :: [(ByteString, ByteString)]
     codes = map (\c -> (C8.singleton c, C8.replicate (B.length b) c)) chars

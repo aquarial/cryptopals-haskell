@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
-module NetworkIO where
+module NetworkIO (getResource) where
 
 import qualified Data.Text    as T
-import qualified Data.Text.IO as TIO
+import qualified Data.ByteString.Lazy as BL
 
 import           Path (Path, Abs, Rel, Dir, File)
 import qualified Path
@@ -17,9 +17,9 @@ import           Control.Concurrent (threadDelay)
 downloads :: Path Rel Dir
 downloads = $(Path.mkRelDir "downloads")
 
-getResource :: T.Text -> IO T.Text
+getResource :: T.Text -> IO BL.ByteString
 getResource url = do res <- downloadOrGetFile url
-                     TIO.readFile $ Path.toFilePath res
+                     BL.readFile $ Path.toFilePath res
 
 
 downloadOrGetFile :: T.Text -> IO (Path Abs File)

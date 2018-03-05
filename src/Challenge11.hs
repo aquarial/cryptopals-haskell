@@ -30,17 +30,20 @@ randEncrypt :: R.MonadRandom m => ByteString -> m ByteString
 randEncrypt itext = do text <- padAround itext
                        key <- randomByteString 16
                        mode <- R.getRandomR (False,True)
-                       case mode of
-                         False -> pure $ encryptECB key text
-                         True  -> do iv <- randomByteString 16
-                                     pure $ encryptCBC key iv text
+                       if mode 
+                       then pure $ encryptECB key text
+                       else do iv <- randomByteString 16
+                               pure $ encryptCBC key iv text
 
 
 chunksof :: Int -> ByteString -> [ByteString]
 chunksof n xs = B.take n xs : chunksof n (B.drop n xs)
 
-detectEncrypt :: Monad m => (ByteString -> m ByteString) -> m Bool
+detectEncrypt :: (ByteString -> IO ByteString) -> IO Bool
 detectEncrypt func = do output <- func $ B.replicate 1000 0
                         let inners = B.take 300 $ B.drop 100 output
                             parts = chunksof 16 inners
-                        return $ all id $ take 3 $ zipWith (==) parts (drop 1 parts)
+                        return $ and $ take 3 $ zipWith (==) parts (drop 1 parts)
+
+c11 :: IO ()
+c11 = print $ detectEncrypt randEncrypt

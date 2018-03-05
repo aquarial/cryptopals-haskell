@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Challenge10 where
 
-
+import           NetworkIO (getResource)
 import           Challenge02                (xorB)
 import           Challenge06                (decode64, chunks)
 import           Challenge07                (encryptECB, decryptECB)
@@ -13,12 +13,9 @@ import qualified Data.ByteString.Char8      as C8
 import qualified Data.ByteString.Lazy       as BL
 import qualified Data.ByteString.Lazy.Char8 as C8L
 
-import           Control.Lens               ((^.))
-import qualified Network.Wreq               as Wreq
-
 c10 = do
-  r <- Wreq.get "https://cryptopals.com/static/challenge-data/10.txt"
-  let body = decode64 $ C8L.toStrict $ C8L.filter (/= '\n') $ r ^. Wreq.responseBody
+  txt <- getResource "https://cryptopals.com/static/challenge-data/10.txt"
+  let body = decode64 $ C8L.toStrict $ C8L.filter (/= '\n') txt
       text = decryptCBC "YELLOW SUBMARINE" zeroIV body
   return text
 
