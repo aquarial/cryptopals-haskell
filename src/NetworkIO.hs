@@ -8,42 +8,46 @@ import qualified Data.Text.IO as TIO
 import           Path (Path, Abs, Rel, Dir, File)
 import qualified Path
 import qualified Path.IO      as PathIO
-import qualified Network.HTTP.Req
 
-import Control.Concurrent (threadDelay)
-import Data.Conduit
+import           Network.HTTP.Simple
+import           Data.Conduit
+import qualified Data.Conduit.Combinators as Comb
+import           Control.Concurrent (threadDelay)
 
 downloads :: Path Rel Dir
 downloads = $(Path.mkRelDir "downloads")
-
-testfile :: Path Rel File
-testfile = downloads Path.</> $(Path.mkRelFile "thatignorefile")
-
 
 getResource :: T.Text -> IO T.Text
 getResource url = do res <- downloadOrGetFile url
                      TIO.readFile $ Path.toFilePath res
 
+
 downloadOrGetFile :: T.Text -> IO (Path Abs File)
-downloadOrGetFile url = do let name = last $ T.splitOn "/" url
-                           res <- getFile name
+downloadOrGetFile url = do namepath <- filepath
+                           res <- getFile namepath
                            case res of
                              Just file -> pure file
-                             Nothing -> do downloadFile url name
+                             Nothing -> do downloadFile url namepath
                                            threadDelay 1000000
                                            downloadOrGetFile url
+  where
+    filepath = do let name = T.unpack $ last $ T.splitOn "/" url
+                  namepath <- Path.parseRelFile name
+                  pure $ downloads Path.</> namepath
 
-downloadFile :: T.Text -> T.Text -> IO ()
-downloadFile url name = return () -- runConduit $ sourceUrl url .| sinkFile (Path.)
+downloadFile :: T.Text -> Path Rel File -> IO ()
+downloadFile url name = do req <- parseRequest (T.unpack url)
+                           runConduitRes $ httpSource req getResponseBody 
+                                         .| Comb.sinkFile (Path.toFilePath name)
 
 
-getFile :: T.Text -> IO (Maybe (Path Abs File))
+getFile :: Path Rel File -> IO (Maybe (Path Abs File))
 getFile filename = do PathIO.ensureDir downloads :: IO ()
                       (_,files) <- PathIO.listDir downloads
                       return $ safeHead $ filter (matchfilename filename) files
 
-matchfilename :: T.Text -> Path b File -> Bool
-matchfilename filename file = T.unpack filename == Path.toFilePath (Path.filename file)
+matchfilename :: Path a File -> Path b File -> Bool
+matchfilename filename file = Path.toFilePath (Path.filename filename) == Path.toFilePath (Path.filename file)
 
 safeHead :: [a] -> Maybe a
 safeHead (x:_) = Just x

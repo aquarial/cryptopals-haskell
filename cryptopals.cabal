@@ -23,7 +23,7 @@ executable cryptopals
                      , base64-bytestring >= 1.0
                      , cryptonite
                      , conduit
-                     , conduit-extra
+                     , http-conduit
                      , path
                      , path-io
                      , random
@@ -33,7 +33,6 @@ executable cryptopals
                      , digits
                      , lens
                      , wreq
-                     , req
                      , unordered-containers >= 0.2.8
 
 
