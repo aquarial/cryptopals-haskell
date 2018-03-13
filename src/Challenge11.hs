@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 module Challenge11 where
 
 
@@ -45,5 +44,5 @@ detectEncrypt func = do output <- func $ B.replicate 1000 0
                             parts = chunksof 16 inners
                         return $ and $ take 3 $ zipWith (==) parts (drop 1 parts)
 
-c11 :: IO ()
-c11 = print $ detectEncrypt randEncrypt
+c11 :: IO Bool
+c11 = detectEncrypt randEncrypt
