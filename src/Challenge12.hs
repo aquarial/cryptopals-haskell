@@ -32,7 +32,6 @@ randEncrypt itext = do
     pure $ encryptECB key (txt <> B.replicate pad 0)
 
 
---detectBlockSize :: (MonadCatch m, R.MonadIO m) => (C8.ByteString -> m a) -> m Int
 detectBlockSize encryptFunc = do
     res <- encryptFunc ""
     next <-
@@ -48,3 +47,4 @@ detectBlockSize encryptFunc = do
 
 c12 :: IO Int
 c12 = detectBlockSize randEncrypt
+
