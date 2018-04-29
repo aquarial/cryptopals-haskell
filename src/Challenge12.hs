@@ -54,19 +54,6 @@ padToOneLessThan b n =
       _ -> padToOneLessThan (B.cons 0 b) n
 
 
---  |       |      |
---  asjfvpoasi
---  asjf
---
---  123456789123456789
---  0000000aabosidjvi
---  000000as
---  00000asj
---  0000asjf
---  asdjifaf
-
-
-
 c12 :: IO ()
 c12 = do
     blocksize <- detectBlockSize prefixEncrypt
