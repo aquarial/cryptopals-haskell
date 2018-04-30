@@ -10,12 +10,11 @@ import qualified Path
 import qualified Path.IO      as PathIO
 
 import           Network.HTTP.Simple
-import           Data.Conduit
-import qualified Data.Conduit.Combinators as Comb
+import           Conduit
 import           Control.Concurrent (threadDelay)
 
 downloads :: Path Rel Dir
-downloads = $(Path.mkRelDir "downloads")
+downloads = $(Path.mkRelDir "downloads/")
 
 getResource :: T.Text -> IO BL.ByteString
 getResource url = do res <- downloadOrGetFile url
@@ -38,7 +37,7 @@ downloadOrGetFile url = do namepath <- filepath
 downloadFile :: T.Text -> Path Rel File -> IO ()
 downloadFile url name = do req <- parseRequest (T.unpack url)
                            runConduitRes $ httpSource req getResponseBody 
-                                         .| Comb.sinkFile (Path.toFilePath name)
+                                         .| sinkFile (Path.toFilePath name)
 
 
 getFile :: Path Rel File -> IO (Maybe (Path Abs File))
