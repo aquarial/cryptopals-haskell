@@ -13,7 +13,7 @@ import qualified Data.ByteString        as B
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8  as C8
 
-import qualified Data.HashMap.Strict    as Map
+import qualified Data.Map.Strict        as Map
 
 c3 :: ByteString
 c3 = decode "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
@@ -28,7 +28,7 @@ tryXorWithEachChar bs = [xorB b bs | b <- xorCodes (B.length bs)]
     xorCodes len = map (C8.replicate len) $ concat [['0'..'9'], ['A'..'Z'], ['a'..'z']]
 
 englishScore :: ByteString -> Double
-englishScore =  sum . map (\c -> Map.lookupDefault 0 c freq) . map toLower . C8.unpack
+englishScore =  sum . map (\c -> Map.findWithDefault 0 c freq) . map toLower . C8.unpack
   where
     freq = Map.fromList [('a', 8.167), ('b', 1.492), ('c', 2.782), ('d', 4.253), ('e', 12.70),
                          ('f', 2.228), ('g', 2.015), ('h', 6.094), ('i', 6.966), ('j', 0.153),
